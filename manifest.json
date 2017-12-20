@@ -3,11 +3,11 @@
   "name": "Tipdoma",
   "version": "1.0",
   "icons": {
-    "128": "favicon.ico"
+    "256": "icon.png"
   },
   "content_scripts": [
     {
-      "matches": [ "*://*.cian.ru/*" ],
+      "matches": [ "*://*.cian.ru/sale/flat/*" ],
       "js": ["jquery-3.2.1.min.js", "content.js"]
     }
   ],
@@ -20,7 +20,7 @@
   ],
   "browser_action": {
     "default_title": "Tipdoma",
-    "default_icon": "favicon.ico",
+    "default_icon": "icon.png",
     "default_popup": "index.html"
   }
 }

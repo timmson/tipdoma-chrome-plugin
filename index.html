@@ -4,19 +4,11 @@
     <meta charset="UTF-8">
     <title>Tipdoma.ru Plugin</title>
 </head>
-<p>Hello, world! </p>
-<div id="content"></div>
-<!--script type="text/javascript" src="index.js"></script-->
-<script type="text/javascript">
-    chrome.runtime.onMessage.addListener(
-        function(request, sender, sendResponse) {
-            console.log(sender.tab ? "from a content script:" + sender.tab.url : "from the extension");
-            if (request.msg === "address") {
-                document.getElementById("content").innerHTML = request.data[0];
-                sendResponse({farewell: "goodbye"});
-            }
-
-        });
-</script>
+<p>tipdoma.ru</p>
+<div id="house_address"></div>
+<div id="house_type"></div>
+<div id="house_plan"></div>
+<script type="text/javascript" src="jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="index.js"></script>
 </body>
 </html>
