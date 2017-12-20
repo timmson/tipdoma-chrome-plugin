@@ -32,7 +32,7 @@ function getStreetId(streetName, callback) {
 function getStreetData(street, callback) {
     $.get("http://tipdoma.ru/search_bld.php?id=" + street.id + "&value=" + decodeURIComponent(street.name), function (data) {
         data = data.replace(/href="series/ig, 'href="http://tipdoma.ru/series');
-        $("")
+        //$("")
         callback(null, data);
     });
 }
