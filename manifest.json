@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "Tipdoma",
+  "version": "1.0",
+
+  "icons": {
+    "128": "favicon.ico"
+  },
+  "content_scripts": [
+    {
+      "matches": [ "*://*/*" ],
+      "js": [ "content.js" ]
+    }
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "permissions": [
+    "http://tipdoma.ru/*"
+  ],
+
+  "browser_action": {
+    "default_title": "Tipdoma",
+    "default_icon": "favicon.ico",
+    "default_popup": "index.html"
+  }
+}
