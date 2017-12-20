@@ -4,7 +4,7 @@ xhr.onreadystatechange = function() {
     if (xhr.readyState === 4) {
         var content = document.getElementById('content');
         console.log(xhr.responseText);
-        content.innerHTML = xhr.responseText; // добавляем в блок с id=dannie  полученный код
+        content.innerHTML = xhr.responseText;
     }
 }
 xhr.send();
