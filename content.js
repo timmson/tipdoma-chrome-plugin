@@ -1,6 +1,11 @@
 $(document).ready(function () {
-    console.log("Yes--> " + $("address > a").length);
+    let address = [];
     $("address > a").each(function() {
-        console.log($(this).html());
+        address.push($(this).html());
+    });
+    console.log(address);
+    chrome.runtime.sendMessage({
+        msg: "address",
+        data: address
     });
 });

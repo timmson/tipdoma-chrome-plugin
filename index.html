@@ -8,11 +8,15 @@
 <div id="content"></div>
 <!--script type="text/javascript" src="index.js"></script-->
 <script type="text/javascript">
-    function map() {
-        var address = chrome.extension.getBackgroundPage().selectedAddress;
-        document.getElementById("content").innerHTML = address;
-    }
-    window.onload = map;
+    chrome.runtime.onMessage.addListener(
+        function(request, sender, sendResponse) {
+            console.log(sender.tab ? "from a content script:" + sender.tab.url : "from the extension");
+            if (request.msg === "address") {
+                document.getElementById("content").innerHTML = request.data[0];
+                sendResponse({farewell: "goodbye"});
+            }
+
+        });
 </script>
 </body>
 </html>

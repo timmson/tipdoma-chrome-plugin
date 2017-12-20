@@ -7,7 +7,7 @@
   },
   "content_scripts": [
     {
-      "matches": [ "*://*/*" ],
+      "matches": [ "*://*.cian.ru/*" ],
       "js": ["jquery-3.2.1.min.js", "content.js"]
     }
   ],
