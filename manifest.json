@@ -8,7 +8,8 @@
   "content_scripts": [
     {
       "matches": [ "*://*.cian.ru/sale/flat/*" ],
-      "js": ["jquery-3.2.1.min.js", "content.js"]
+      "js": ["jquery-3.2.1.min.js", "content.js"],
+      "css": ["content.css"]
     }
   ],
   "background": {
@@ -20,7 +21,6 @@
   ],
   "browser_action": {
     "default_title": "Tipdoma",
-    "default_icon": "icon.png",
-    "default_popup": "index.html"
+    "default_icon": "icon.png"
   }
 }

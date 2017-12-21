@@ -1,0 +1,35 @@
+p#tipdoma_section_enable {
+    cursor: pointer;
+}
+
+div#tipdoma_section {
+    display: none;
+}
+table.tipdoma_data {
+    width: 300px;
+    border: 1px solid #ccc;
+    border-spacing: 0px;
+    border-collapse: separate;
+}
+
+/*table.tipdoma_data tr {
+    border: 1px solid #ccc;
+    padding: 1px;
+    text-align: center;
+}*/
+
+table.tipdoma_data th {
+    border: 1px solid #ccc;
+    padding: 1px;
+    text-align: center;
+}
+
+table.tipdoma_data td {
+    border: 1px solid #ccc;
+    padding: 1px;
+    text-align: center;
+}
+
+img.tipdoma_img {
+    width: 600px;
+}
