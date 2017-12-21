@@ -59,16 +59,26 @@ function getBuildingData(building, callback) {
             out += buildings[i].series.name === undefined
                 ? "Individual project"
                 : "<a target=\"_blank\" href=\"" + buildings[i].series.url + "\">" + buildings[i].series.name + "</a>"
-                + "&nbsp;|&nbsp;<a target=\"_blank\" href=\"#\">Plan</a>";
+                + "&nbsp;|&nbsp;<a target=\"_blank\" href=\"#\" onclick=\"onClickPlan("\"+buildings[i].series.url+"\")\">Plan</a>";
             out += "</td>";
             out += "</tr>";
         }
         out += "</table>";
-        //console.log(out);
+        //console.log(out);d
         callback(null, out);
     });
 }
-
+function onClickPlan(url) {
+    getHouseTypeByUrl(url, function (err, houseType) { 
+            console.log(type);
+            if (err) {
+                console.error(err);
+            } else {
+                window.open(houseType.plan, "_blank");
+            }
+        }
+    );
+}
 function getHouseTypeByUrl(url, callback) {
     $.get(url, function (data) {
         callback(err, {
