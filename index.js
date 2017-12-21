@@ -64,7 +64,16 @@ function getBuildingData(building, callback) {
             out += "</tr>";
         }
         out += "</table>";
-        console.log(out);
+        //console.log(out);
         callback(null, out);
+    });
+}
+
+function getHouseTypeByUrl(url, callback) {
+    $.get(url, function (data) {
+        callback(err, {
+            photo: $("#carousel-photo > div > div > img").attr("src"),
+            plan: $("#carousel-plan > div > div > img").attr("src")
+        });
     });
 }
