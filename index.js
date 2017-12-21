@@ -2,7 +2,8 @@ chrome.tabs.query({currentWindow: true, active: true}, function (tabs) {
     let activeTab = tabs[0];
     chrome.tabs.sendMessage(activeTab.id, {msg: "address"}, function (address) {
         $("#house_address").html(address.street + " " + address.building);
-        getStreetId(address.street, function (err, streetId) {
+        let streetName = address.street.replace(/проезд/i, "");
+        getStreetId(streetName, function (err, streetId) {
             if (err) {
                 console.error(err);
             } else {
@@ -35,7 +36,9 @@ function getBuildingData(building, callback) {
         let buildings = [];
         $("tbody tr", data).each(function () {
             let address = $(this).find("td:nth-child(2) a").html();
-            if (address.search(building.number) > 0) {
+            let buildNumber = building.number.replace(/К/i, " корп.").replace(/С/i, " стр.");
+            console.log(buildNumber + ", " + address + " = " + address.search(buildNumber));
+            if (address.search(buildNumber) >= 0) {
                 buildings.push({
                     address: address,
                     material: $(this).find("td:nth-child(3)").html(),
@@ -56,29 +59,25 @@ function getBuildingData(building, callback) {
             out += "<td>" + buildings[i].floorsCount + "</td>";
             out += "<td>" + buildings[i].year + "</td>";
             out += "<td>";
-            out += buildings[i].series.name === undefined
-                ? "Individual project"
-                : "<a target=\"_blank\" href=\"" + buildings[i].series.url + "\">" + buildings[i].series.name + "</a>"
-                + "&nbsp;|&nbsp;<a href=\"#\" onclick=\"return onClickPlan('" + buildings[i].series.url + "')\">Plan</a>";
+            if (buildings[i].series.name !== undefined) {
+                out += "<a target=\"_blank\" href=\"" + buildings[i].series.url + "\">" + buildings[i].series.name + "</a>";
+            } else {
+                out += "Individual project";
+            }
             out += "</td>";
             out += "</tr>";
+            if (buildings[i].series.name !== undefined) {
+                out += "<tr><td colspan=\"5\"><a id=\"plan" + i + "\" target=\"_blank\">&nbsp;</a></td></tr>";
+                getHouseTypeByUrl(buildings[i].series.url, function (err, houseType) {
+                    $("#plan" + i).attr("href", houseType.plan);
+                    $("#plan" + i).append("<img src=\"" + houseType.plan + "\"/>");
+                });
+            }
         }
         out += "</table>";
         //console.log(out);d
         callback(null, out);
     });
-}
-
-function onClickPlan(url) {
-    getHouseTypeByUrl(url, function (err, houseType) {
-            console.log(houseType);
-            if (err) {
-                console.error(err);
-            } else {
-                window.open(houseType.plan, "_blank");
-            }
-        }
-    );
 }
 
 function getHouseTypeByUrl(url, callback) {
