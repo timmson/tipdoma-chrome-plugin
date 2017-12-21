@@ -37,7 +37,7 @@ function getDescriptionTable(buildings) {
         if (buildings[i].series.name !== undefined) {
             out += "<a target=\"_blank\" href=\"" + buildings[i].series.url + "\">" + buildings[i].series.name + "</a>";
         } else {
-            out += "Individual project";
+            out += "Индивидуальный проект";
         }
         out += "</td>";
         out += "</tr>";
