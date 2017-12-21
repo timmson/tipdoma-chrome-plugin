@@ -6,9 +6,10 @@ chrome.tabs.query({currentWindow: true, active: true}, function (tabs) {
             if (err) {
                 console.error(err);
             } else {
-                getStreetData({
-                    id: streetId,
-                    name: address.street
+                getBuildingData({
+                    streetId: streetId,
+                    streetName: address.street,
+                    number: address.building
                 }, function (err, data) {
                     if (err) {
                         console.error(err);
@@ -29,10 +30,41 @@ function getStreetId(streetName, callback) {
     });
 }
 
-function getStreetData(street, callback) {
-    $.get("http://tipdoma.ru/search_bld.php?id=" + street.id + "&value=" + decodeURIComponent(street.name), function (data) {
-        data = data.replace(/href="series/ig, 'href="http://tipdoma.ru/series');
-        //$("")
-        callback(null, data);
+function getBuildingData(building, callback) {
+    $.get("http://tipdoma.ru/search_bld.php?id=" + building.streetId + "&value=" + decodeURIComponent(building.streetName), function (data) {
+        let buildings = [];
+        $("tbody tr", data).each(function () {
+            let address = $(this).find("td:nth-child(2) a").html();
+            if (address.search(building.number) > 0) {
+                buildings.push({
+                    address: address,
+                    material: $(this).find("td:nth-child(3)").html(),
+                    floorsCount: $(this).find("td:nth-child(4)").html(),
+                    year: $(this).find("td:nth-child(5)").html(),
+                    series: {
+                        name: $(this).find("td:nth-child(6) a").html(),
+                        url: "http://tipdoma.ru/" + $(this).find("td:nth-child(6) a").attr("href")
+                    }
+                })
+            }
+        });
+        let out = "<table width=\"450px;\"><tr><th>Address</th><th>Material</th><th>Floors</th><th>Built</th><th>Series</th></tr>";
+        for (let i = 0; i < buildings.length; i++) {
+            out += "<tr>";
+            out += "<td>" + buildings[i].address + "</td>";
+            out += "<td>" + buildings[i].material + "</td>";
+            out += "<td>" + buildings[i].floorsCount + "</td>";
+            out += "<td>" + buildings[i].year + "</td>";
+            out += "<td>";
+            out += buildings[i].series.name === undefined
+                ? "Individual project"
+                : "<a target=\"_blank\" href=\"" + buildings[i].series.url + "\">" + buildings[i].series.name + "</a>"
+                + "&nbsp;|&nbsp;<a target=\"_blank\" href=\"#\">Plan</a>";
+            out += "</td>";
+            out += "</tr>";
+        }
+        out += "</table>";
+        console.log(out);
+        callback(null, out);
     });
 }
