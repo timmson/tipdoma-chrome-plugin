@@ -1,8 +1,8 @@
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     if (message.msg === "address") {
         let address = message.address;
-        console.debug(address.street + " " + address.building);
-        let streetName = address.street.replace(/проезд/i, "");
+        let streetName = address.street.replace(/проезд/i, "").replace(/ул\./i, "").trim();
+        console.debug(streetName + " " + address.building);
         getStreetId(streetName, function (err, streetId) {
             if (err) {
                 console.error(err);
@@ -30,7 +30,8 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 });
 
 function getStreetId(streetName, callback) {
-    $.get("http://tipdoma.ru/search_str.php?value=" + decodeURIComponent(streetName), function (data) {
+    $.get(encodeURI("http://tipdoma.ru/search_str.php?value=" + streetName), function (data) {
+        console.debug(data);
         let str = $("a", data).first().attr("onclick");
         let id = str.split("(")[1].split(",")[0];
         return callback(null, id);
@@ -38,7 +39,7 @@ function getStreetId(streetName, callback) {
 }
 
 function getBuildingData(building, callback) {
-    $.get("http://tipdoma.ru/search_bld.php?id=" + building.streetId + "&value=" + decodeURIComponent(building.streetName), function (data) {
+    $.get(encodeURI("http://tipdoma.ru/search_bld.php?id=" + building.streetId + "&value=" + building.streetName), function (data) {
         let buildings = [];
         $("tbody tr", data).each(function () {
             let address = $(this).find("td:nth-child(2) a").html();

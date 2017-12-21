@@ -6,6 +6,7 @@ $(document).ready(function () {
 
     address = address.join().split(",");
 
+    console.debug("Sending: " + JSON.stringify(address));
     chrome.runtime.sendMessage({
         msg: "address", address: {
             city: address[0] + ", " + address[1],
@@ -14,9 +15,8 @@ $(document).ready(function () {
             building: address[4]
         }
     }, function (response) {
-        //console.log(response);
-        //$(getDescriptionTable(response)).insertAfter("address");
-        $("[data-reactid=230]").html(getDescriptionTable(response));
+        console.debug("Buildings: " + JSON.stringify(response));
+        $(getDescriptionTable(response)).insertAfter("address");
         $("p#tipdoma_section_enable").click(function () {
             $("div#tipdoma_section").slideToggle();
         });
@@ -24,9 +24,9 @@ $(document).ready(function () {
 });
 
 function getDescriptionTable(buildings) {
-    let out ="<p id=\"tipdoma_section_enable\">Tipdoma.ru</p><div id=\"tipdoma_section\">";
+    let out ="<p id=\"tipdoma_section_enable\">Справка по типу дома</p><div id=\"tipdoma_section\">";
     out += "<table class=\"tipdoma_data\">";
-    out += "<tr><th>Address</th><th>Material</th><th>Floors</th><th>Built</th><th>Series</th></tr>";
+    out += "<tr><th>Адрес</th><th>Материал</th><th>Кол-во этажей</th><th>Дата постройки</th><th>Серия</th></tr>";
     for (let i = 0; i < buildings.length; i++) {
         out += "<tr>";
         out += "<td>" + buildings[i].address + "</td>";
