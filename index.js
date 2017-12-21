@@ -59,7 +59,7 @@ function getBuildingData(building, callback) {
             out += buildings[i].series.name === undefined
                 ? "Individual project"
                 : "<a target=\"_blank\" href=\"" + buildings[i].series.url + "\">" + buildings[i].series.name + "</a>"
-                + "&nbsp;|&nbsp;<a target=\"_blank\" href=\"#\" onclick=\"onClickPlan("\"+buildings[i].series.url+"\")\">Plan</a>";
+                + "&nbsp;|&nbsp;<a href=\"#\" onclick=\"return onClickPlan('" + buildings[i].series.url + "')\">Plan</a>";
             out += "</td>";
             out += "</tr>";
         }
@@ -68,9 +68,10 @@ function getBuildingData(building, callback) {
         callback(null, out);
     });
 }
+
 function onClickPlan(url) {
-    getHouseTypeByUrl(url, function (err, houseType) { 
-            console.log(type);
+    getHouseTypeByUrl(url, function (err, houseType) {
+            console.log(houseType);
             if (err) {
                 console.error(err);
             } else {
@@ -79,11 +80,12 @@ function onClickPlan(url) {
         }
     );
 }
+
 function getHouseTypeByUrl(url, callback) {
     $.get(url, function (data) {
-        callback(err, {
-            photo: $("#carousel-photo > div > div > img").attr("src"),
-            plan: $("#carousel-plan > div > div > img").attr("src")
+        callback(null, {
+            photo: "http://tipdoma.ru/" + $("#carousel-photo > div > div > img", data).attr("src"),
+            plan: "http://tipdoma.ru/" + $("#carousel-plan > div > div > img", data).attr("src")
         });
     });
 }
