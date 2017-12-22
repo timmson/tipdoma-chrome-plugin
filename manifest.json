@@ -7,7 +7,7 @@
   },
   "content_scripts": [
     {
-      "matches": [ "*://*.cian.ru/sale/flat/*" ],
+      "matches": [ "*://*.cian.ru/sale/flat/*", "*://*.domofond.ru/*" ],
       "js": ["jquery-3.2.1.min.js", "content.js"],
       "css": ["content.css"]
     }

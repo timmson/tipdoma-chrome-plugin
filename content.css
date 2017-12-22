@@ -6,17 +6,11 @@ div#tipdoma_section {
     display: none;
 }
 table.tipdoma_data {
-    width: 300px;
+    width: 450px;
     border: 1px solid #ccc;
     border-spacing: 0px;
     border-collapse: separate;
 }
-
-/*table.tipdoma_data tr {
-    border: 1px solid #ccc;
-    padding: 1px;
-    text-align: center;
-}*/
 
 table.tipdoma_data th {
     border: 1px solid #ccc;

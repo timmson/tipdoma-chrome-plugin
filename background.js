@@ -2,7 +2,6 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     if (message.msg === "address") {
         let address = message.address;
         let streetName = address.street.replace(/проезд/i, "").replace(/ул\./i, "").trim();
-        console.debug(streetName + " " + address.building);
         getStreetId(streetName, function (err, streetId) {
             if (err) {
                 console.error(err);
@@ -22,7 +21,6 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
         });
     } else if (message.msg === "plan") {
         getHouseTypeByUrl(message.url, function (err, houseType) {
-            console.debug(houseType);
             sendResponse(houseType);
         })
     }
@@ -31,7 +29,6 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 
 function getStreetId(streetName, callback) {
     $.get(encodeURI("http://tipdoma.ru/search_str.php?value=" + streetName), function (data) {
-        console.debug(data);
         let str = $("a", data).first().attr("onclick");
         let id = str.split("(")[1].split(",")[0];
         return callback(null, id);
