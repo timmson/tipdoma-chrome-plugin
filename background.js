@@ -28,7 +28,12 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 
 function getStreetId(streetName, callback) {
     $.get(encodeURI("http://tipdoma.ru/search_str.php?value=" + streetName), function (data) {
-        let str = $("a", data).first().attr("onclick");
+        let str = null;
+        $("a", data).each(function () {
+            if ($(this).html().startsWith(streetName) && !str) {
+                str = $(this).attr("onclick");
+            }
+        });
         let id = str.split("(")[1].split(",")[0];
         return callback(null, id);
     });
@@ -42,7 +47,7 @@ function getBuildingData(building, callback) {
             address = address.split(",")[1].trim();
             if (address === building.number) {
                 buildings.push({
-                    address: address,
+                    address: $(this).find("td:nth-child(2) a").html(),
                     material: $(this).find("td:nth-child(3)").html(),
                     floorsCount: $(this).find("td:nth-child(4)").html(),
                     year: $(this).find("td:nth-child(5)").html(),
