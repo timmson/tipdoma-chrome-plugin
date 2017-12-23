@@ -1,13 +1,15 @@
 const config = {
     "www.cian.ru": {
         addressSelector: "address > a",
-        addressReady: true,
         insertAfter: "address"
     },
     "www.domofond.ru": {
         addressSelector: "div.e-listing-address > a.e-listing-address-line:last",
-        addressReady: false,
         insertAfter: "div.e-listing-address > a.e-listing-address-line:last"
+    },
+    "www.avito.ru": {
+        addressSelector: "span[itemprop=streetAddress]",
+        insertAfter: "span[itemprop=streetAddress]"
     }
 };
 
@@ -23,18 +25,29 @@ $(document).ready(function () {
 
     address = address.join().split(",");
 
-    if (!cfg.addressReady) {
-        address = [address[3].trim(), "?AO", address[2].trim(), address[0].trim(), address[1].replace(/д\./i, "").trim()];
+    switch (window.location.host) {
+        case "www.domofond.ru" :
+            address = [address[3].trim(), "?AO", address[2].trim(), address[0].trim(), address[1].trim()];
+            break;
+        case "www.avito.ru" :
+            if (address.length === 1) {
+                let splitPoint = address[0].search(/\d(-|c|к)?\d?/);
+                address = [address[0].slice(0, splitPoint), address[0].slice(splitPoint - address[0].length)];
+            }
+            address = ["Москва", "?AO", "? район", address[0].trim(), address[1].trim()];
+            break;
     }
 
     address = {
-        city: address[0] + ", " + address[1],
+        city: address[0],
+        county: address[1],
         district: address[2],
-        street: address[3],
-        building: address[4]
+        street: address[3].replace(/(б-р|проезд|улица|ул(\.| ))/i, "").trim(),
+        building: normaizeBuilding(address[4])
     };
 
     if (address.city.search(/Москва/i) < 0) {
+        console.debug("Failed:" + address);
         return;
     }
 
@@ -47,6 +60,14 @@ $(document).ready(function () {
         });
     });
 });
+
+function normaizeBuilding(building) {
+    if (building.search(/(\dк\d)/i) >= 0) {
+        building = building.replace(/к/i, " корп.");
+    }
+    building = building.replace(/корп\. /i, "корп.");
+    return building.replace(/(д\.|дом )/i, "").replace(/(с|стр\.)/i, " стр.").trim();
+}
 
 function getDescriptionTable(buildings) {
     let out = "<p id=\"tipdoma_section_enable\">Справка по типу дома</p><div id=\"tipdoma_section\">";

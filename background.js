@@ -1,8 +1,7 @@
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     if (message.msg === "address") {
         let address = message.address;
-        let streetName = address.street.replace(/проезд/i, "").replace(/ул\./i, "").trim();
-        getStreetId(streetName, function (err, streetId) {
+        getStreetId(address.street, function (err, streetId) {
             if (err) {
                 console.error(err);
             } else {
@@ -40,8 +39,8 @@ function getBuildingData(building, callback) {
         let buildings = [];
         $("tbody tr", data).each(function () {
             let address = $(this).find("td:nth-child(2) a").html();
-            let buildNumber = building.number.replace(/К/i, " корп.").replace(/С/i, " стр.");
-            if (address.search(buildNumber) >= 0) {
+            address = address.split(",")[1].trim();
+            if (address === building.number) {
                 buildings.push({
                     address: address,
                     material: $(this).find("td:nth-child(3)").html(),

@@ -7,7 +7,7 @@
   },
   "content_scripts": [
     {
-      "matches": [ "*://*.cian.ru/sale/flat/*", "*://*.domofond.ru/*" ],
+      "matches": [ "*://*.cian.ru/sale/flat/*", "*://*.domofond.ru/*", "*://*.avito.ru/moskva/kvartiry/*"  ],
       "js": ["jquery-3.2.1.min.js", "content.js"],
       "css": ["content.css"]
     }
